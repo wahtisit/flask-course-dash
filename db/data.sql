@@ -1,0 +1,1 @@
+INSERT INTO courses (course_id, semester,category, credits)
