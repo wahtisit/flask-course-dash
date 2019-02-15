@@ -1,0 +1,9 @@
+Inside python3 shell:
+
+from app import db, create_app
+db.create_all(app=create_app())
+
+Where create_app just returns the app.
+
+def create_app():
+    return app
