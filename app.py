@@ -38,7 +38,15 @@ def add_course():
     courses = Course.query.all()
     return render_template("courses.html",courses=courses)
 
-@app.route("/remove_courses", methods=["POST", "GET"])
+@app.route("/courses/<string:course_id>", methods=["GET"])
+def course_info(course_id):
+    """ get info about a single course """
+    course = db.session.query(Course).get(course_id)
+    course_json = jsonify(course.as_dict())
+    print(course_json)
+    return course_json
+
+@app.route("/remove_course", methods=["POST", "GET"])
 def remove_course():
     if request.method == 'GET':
         return redirect(url_for('courses'))
@@ -52,6 +60,42 @@ def remove_course():
 
     courses = Course.query.all()
     return render_template("courses.html", courses=courses)
+
+@app.route("/schedules", methods=["GET"])
+def schedules():
+    schedules = db.session.query(Schedule).all()
+    #courses = Course.query.all()
+    courses = db.session.query(Course).filter(~Course.booked_in.any())
+    
+    return render_template("schedules.html", schedules=schedules, courses=courses)
+
+@app.route("/schedules", methods=["POST"])
+def add_schedule():
+    course_id = request.form.get("course_id")
+    year = request.form.get("year")
+    realm = request.form.get("realm")
+    minorMajor = request.form.get("minorMajor")
+
+    semester = db.session.query(Course).get(course_id).semester
+
+    schedule = Schedule(course_id=course_id, year=year, realm=realm, minorMajor=minorMajor, semester=semester)
+    db.session.add(schedule)
+    db.session.commit()
+
+    return redirect(url_for('schedules'))
+
+@app.route("/remove_schedule", methods=["GET", "POST"])
+def remove_schedule():
+    if request.method == 'GET':
+        return redirect(url_for('courses'))
+
+    schedule_id = request.form.get("schedule_id")
+    
+    Schedule.query.filter_by(id=schedule_id).delete()
+    db.session.commit()
+
+    print(f"Removing {schedule_id} from table schedules")
+    return redirect(url_for('schedules'))
 
 @app.route("/flights")
 def flights():

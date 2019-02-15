@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Schedule
+{% endblock %}
+
+{% block static_js %}
+<script type="text/javascript" src="../static/schedules.js"></script>
+{% endblock %}
+
+{% block body %}
+{# schedule = course item planned to be booked at specified time #}
+    <h2>Planned courses to take</h2>
+
+    <table class="table">
+        <thead class="thead dark">
+            <tr>
+                <th scope="col">Course name</th>
+                <th scope="col">Year</th>
+                <th scope="col">Semester</th>
+                <th scope="col">Credits</th>
+                <th scope="col">HF / NF</th>
+                <th scope="col">Realm</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.course.name }}</td>
+                <td>{{ schedule.year }}</td>
+                <td>{{ schedule.semester }}</td>
+                <td>{{ schedule.course.credits }}</td>
+                <td>{{ schedule.minorMajor }}</td>
+                <td>{{ schedule.realm }}</td>
+                
+                <td>
+                    <form action="{{ url_for('remove_schedule') }}" method="post">
+                        <input type="hidden" value="{{ schedule.id }}" name="schedule_id">
+                        <input class="btn btn-danger" type="submit" value="remove">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>   
+    </table>
+
+    <h3>Add a new course</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col col-6">
+                <form action="{{ url_for('add_schedule') }}" method="post">
+                    <div class="form-group">
+                        {# <input class="form-control" name="course_id", placeholder="Course ID (e.g. MOEC200)"> #}
+                        <select id="course_id" class="form-control" name="course_id">
+                            {% for course in courses %}
+                            <option value="{{ course.course_id }}">{{ course.name }} ({{ course.course_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="year" class="form-control" name="year">
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="minorMajor" class="form-control" name="minorMajor">
+                            <option value="HF">HF</option>
+                            <option value="NF">NF</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="realm" class="form-control" name="realm">
+                            <option value="wb_inf">Wahlbereich INF</option>
+                            <option value="wb_wwf">Wahlbereich WWF</option>
+                            <option value="wb">Freier Wahlbereich</option>
+                            <option value="other">other (z.B. Basismodul)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary">Add a course</button>
+                    </div>
+                </form>
+            </div>
+        
+            <div class="col col-6">
+                <div id="result">
+                    <ul class="list-group" id="list-info" style="display: none">
+                        <li class="list-group-item" id="list-name"></li>
+                        <li class="list-group-item" id="list-semester"></li>
+                        <li class="list-group-item" id="list-category"></li>
+                        <li class="list-group-item" id="list-credits"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
