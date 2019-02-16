@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from models import *
 
 app = Flask(__name__)
+server = app.server
 
 db_path = os.path.join(os.path.dirname(__file__), 'database.db')
 db_uri = 'sqlite:///{}'.format(db_path)
