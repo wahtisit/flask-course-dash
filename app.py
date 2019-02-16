@@ -2,7 +2,6 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from models import *
 
 app = Flask(__name__)
-server = app.server
 
 db_path = os.path.join(os.path.dirname(__file__), 'database.db')
 db_uri = 'sqlite:///{}'.format(db_path)
@@ -139,3 +138,6 @@ def flight_api(flight_id):
             "duration": flight.duration,
             "passengers": names
         })
+        
+if __name__ == '__main__':
+    app.run(debug=False,port=8080,host='0.0.0.0')
