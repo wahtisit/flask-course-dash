@@ -5,44 +5,63 @@
 {% endblock %}
 
 {% block body %}
-    <h1>All Courses</h1>
+    <h3>All Courses</h3>
+    <table class="table">
+<thead class="thead dark">
+    <tr>
+        <th scope="col">Course name</th>
+        <th scope="col">Year</th>
+        <th scope="col">Semester</th>
+        <th scope="col">Credits</th>
+        <th scope="col">HF / NF</th>
+        <th scope="col">Realm</th>
+        <th scope="col"></th>
+    </tr>
+</thead>
+<tbody>
+{% for course in courses %}
+    <tr>
+        <td>{{ course.course_id }}</td> 
+        <td>{{ course.name }}</td>
+        <td>{{ course.semester }}</td>
+        <td>{{ course.credits }}</td>
+        <td>{{ course.category }}</td>
+        <td>
+            <form action="{{ url_for('remove_course') }}" method="post">
+                <input type="hidden" value="{{ course.course_id }}" name="course_id">
+                <input class="btn btn-danger" type="submit" value="remove">
+            </form>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>   
+    </table>
 
-    <ul>
-        {% for course in courses %}
-            <li>
-                {{ course.course_id }} - {{ course.name }}
-                <form action="{{ url_for('remove_course') }}" method="post">
-                    <input type="hidden" value="{{ course.course_id }}" name="course_id">
-                    <input class="btn btn-danger" type="submit" value="remove">
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
-    <h2>Add a new course</h2>
+
+    <h3>Add a new course</h3>
     <form action="{{ url_for('add_course') }}" method="post">
-        <div class="form-group">
-            <input class="form-control" name="course_id", placeholder="Course ID (e.g. MOEC200)">
+    <div class="form-group">
+        <input class="form-control" name="course_id", placeholder="Course ID (e.g. MOEC200)">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" name="name" placeholder="Name">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" name="semester" placeholder="Semester (e.g. FS)">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" name="category" placeholder="Category (e.g. INF5)">
+    </div>
+
+    <div class="form-group">
+            <input class="form-control" name="credits" placeholder="Credits">
         </div>
 
-        <div class="form-group">
-            <input class="form-control" name="name" placeholder="Name">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" name="semester" placeholder="Semester (e.g. FS)">
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" name="category" placeholder="Category (e.g. INF5)">
-        </div>
-
-        <div class="form-group">
-                <input class="form-control" name="credits" placeholder="Credits">
-            </div>
-
-        <div class="form-group">
-            <button class="btn btn-primary">Add a course</button>
-        </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Add a course</button>
+    </div>
     </form>
-
 {% endblock %}

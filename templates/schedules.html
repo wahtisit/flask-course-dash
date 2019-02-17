@@ -10,7 +10,7 @@
 
 {% block body %}
 {# schedule = course item planned to be booked at specified time #}
-    <h2>Planned courses to take</h2>
+    <h3>Planned courses to take</h3>
 
     <table class="table">
         <thead class="thead dark">
@@ -49,12 +49,12 @@
     <div class="container">
         <div class="row">
             <div class="col col-6">
-                <form action="{{ url_for('add_schedule') }}" method="post">
+                <form action="{{ url_for('remove_course') }}" method="post">
                     <div class="form-group">
                         {# <input class="form-control" name="course_id", placeholder="Course ID (e.g. MOEC200)"> #}
                         <select id="course_id" class="form-control" name="course_id">
                             {% for course in courses %}
-                            <option value="{{ course.course_id }}">{{ course.name }} ({{ course.course_id }})</option>
+                            <option value="{{ url_for('remove_course') }}">{{ course.name }} ({{ course.course_id }})</option>
                             {% endfor %}
                         </select>
                     </div>
